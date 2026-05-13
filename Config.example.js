@@ -1,0 +1,1 @@
+window.BHARATIYA_API_KEY = "sk-ant-YOUR_REAL_API_KEY_HERE
