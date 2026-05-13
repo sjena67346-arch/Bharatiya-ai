@@ -5,7 +5,7 @@
 
 // ─── CONFIG ──────────────────────────────────
 const CONFIG = {
-  GEMINI_API_KEY: "PASTE_YOUR_GEMINI_API_KEY_HERE", // 👈 Paste your key here
+  GEMINI_API_KEY: AIzaSyAb87uAJeSAbvToLwlDraD98b2v9jp9bhI
   MODEL: "gemini-2.0-flash",
   SYSTEM_PROMPT: `You are Bharatiya AI, a proud and intelligent Indian AI assistant inspired by the rich heritage, culture, and values of Bharat (India). 
 
