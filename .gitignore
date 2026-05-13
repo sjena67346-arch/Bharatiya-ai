@@ -1,0 +1,28 @@
+# ============================================
+#   BHARATIYA AI â€” .gitignore
+# ============================================
+
+# âš ï¸ NEVER commit your API key!
+config.js
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node (if you add a backend later)
+node_modules/
+npm-debug.log*
+.env
+.env.local
+.env.production
+
+# Build output
+dist/
+build/
