@@ -15,4 +15,4 @@
 // Set environment variable: GEMINI_API_KEY=your-key-here
 //
 
-window.GEMINI_API_KEY = "your-gemini-api-key-here";
+window.GEMINI_API_KEY = "AIzaSyBHOsNfo6aOz-au9X6PvHZZqxtGcWi55bM",
