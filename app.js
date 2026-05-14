@@ -5,7 +5,7 @@
 
 // ─── CONFIG ──────────────────────────────────
 const CONFIG = {
-  GEMINI_API_KEY: "AIzaSyBHOsNfo6aOz-au9X6PvHZZqxtGcWi55bM",
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY || localStorage.getItem("gemini_api_key") || "",
   MODEL: "gemini-2.0-flash",
   SYSTEM_PROMPT: `You are Bharatiya AI, a proud and intelligent Indian AI assistant inspired by the rich heritage, culture, and values of Bharat (India). 
 
@@ -60,6 +60,7 @@ const lightboxClose = document.getElementById("lightboxClose");
 
 // ─── INIT ─────────────────────────────────────
 renderHistory();
+checkAPIKey();
 userInput.addEventListener("input", autoResize);
 userInput.addEventListener("keydown", handleKeydown);
 sendBtn.addEventListener("click", handleSend);
@@ -80,6 +81,20 @@ document.querySelectorAll(".suggestion-card").forEach(card => {
     handleSend();
   });
 });
+
+// ─── API KEY CHECK ─────────────────────────────
+function checkAPIKey() {
+  if (!CONFIG.GEMINI_API_KEY) {
+    const key = prompt("⚠️ Gemini API Key is missing!\n\nPlease enter your Gemini API key (get it from https://makersuite.google.com/app/apikey):");
+    if (key) {
+      CONFIG.GEMINI_API_KEY = key;
+      localStorage.setItem("gemini_api_key", key);
+    } else {
+      appendAIMessage("❌ API key is required to use Bharatiya AI. Please refresh and provide your key.");
+      sendBtn.disabled = true;
+    }
+  }
+}
 
 // ─── AUTO-RESIZE TEXTAREA ─────────────────────
 function autoResize() {
@@ -124,6 +139,11 @@ async function handleSend() {
   const text = userInput.value.trim();
   if ((!text && !attachedImageBase64) || isLoading) return;
 
+  if (!CONFIG.GEMINI_API_KEY) {
+    appendAIMessage("❌ API key not configured. Please set your Gemini API key.");
+    return;
+  }
+
   hideWelcome();
 
   // Show user bubble
@@ -162,7 +182,7 @@ async function handleSend() {
     saveSession(text, aiText);
   } catch (err) {
     removeTyping(typingId);
-    appendAIMessage(`⚠️ **Error:** ${err.message}\n\nPlease check your Gemini API key in app.js and try again.`);
+    appendAIMessage(`⚠️ **Error:** ${err.message}\n\n**Solution:** Check that:\n1. Your API key is valid\n2. The Gemini API is enabled in Google Cloud Console\n3. You have remaining API quota`);
   } finally {
     sendBtn.disabled = false;
     isLoading = false;
@@ -171,6 +191,10 @@ async function handleSend() {
 
 // ─── GEMINI API CALL ──────────────────────────
 async function callGeminiAPI() {
+  if (!CONFIG.GEMINI_API_KEY) {
+    throw new Error("Gemini API Key is not configured. Please set GEMINI_API_KEY environment variable or provide it when prompted.");
+  }
+
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${CONFIG.MODEL}:generateContent?key=${CONFIG.GEMINI_API_KEY}`;
 
   const body = {
